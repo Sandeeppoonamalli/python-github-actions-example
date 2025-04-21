@@ -1,0 +1,36 @@
+name: Python CI
+
+# Trigger the action when there is a push to main or a pull request to main
+on:
+  push:
+    branches:
+      - main  # Can adjust if using a different main branch name
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # The job will run on the latest Ubuntu machine
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      # Step 3: Install dependencies from requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip  # Ensure pip is up-to-date
+          pip install -r requirements.txt  # Install dependencies
+
+      # Step 4: Run tests using pytest
+      - name: Run tests
+        run: |
+          pytest --maxfail=1 --disable-warnings -q  # Run tests with pytest
